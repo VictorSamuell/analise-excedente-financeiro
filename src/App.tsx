@@ -89,6 +89,7 @@ const defaultSettings: Settings = {
 export default function App() {
   const [tab, setTab] = useState("dashboard"),
     [mobile, setMobile] = useState(false),
+    [navVisible, setNavVisible] = useState(true),
     [settings, setSettings] = useState(defaultSettings),
     [period, setPeriod] = useState("1m"),
     [end, setEnd] = useState(shiftDays(today(), -1)),
@@ -107,6 +108,29 @@ export default function App() {
         return "light";
       }
     });
+  useEffect(() => {
+    const mobileViewport = window.matchMedia("(max-width: 800px)");
+    let previousY = window.scrollY;
+
+    const updateNavigation = () => {
+      const currentY = window.scrollY;
+      if (!mobileViewport.matches || mobile || currentY <= 24) {
+        setNavVisible(true);
+      } else if (currentY < previousY - 4) {
+        setNavVisible(true);
+      } else if (currentY > previousY + 4) {
+        setNavVisible(false);
+      }
+      previousY = currentY;
+    };
+
+    window.addEventListener("scroll", updateNavigation, { passive: true });
+    window.addEventListener("resize", updateNavigation);
+    return () => {
+      window.removeEventListener("scroll", updateNavigation);
+      window.removeEventListener("resize", updateNavigation);
+    };
+  }, [mobile]);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document
@@ -249,7 +273,7 @@ export default function App() {
             Excedente financeiro<small>Análise e comparação</small>
           </div>
         </div>
-        <nav aria-label="Seções da ferramenta">
+        <nav id="primary-navigation" aria-label="Seções da ferramenta">
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -290,12 +314,14 @@ export default function App() {
         />
       )}
       <div className="main-shell">
-        <header className="topbar">
+        <header className={`topbar ${navVisible ? "" : "topbar-hidden"}`}>
           <div>
             <button
               className="mobile-menu icon-button"
-              aria-label="Abrir navegação"
-              onClick={() => setMobile(true)}
+              aria-label={mobile ? "Fechar navegação" : "Abrir navegação"}
+              aria-expanded={mobile}
+              aria-controls="primary-navigation"
+              onClick={() => setMobile((open) => !open)}
             >
               <Menu size={21} />
             </button>
