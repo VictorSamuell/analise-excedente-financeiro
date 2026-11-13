@@ -1,3 +1,4 @@
+import { loadCurrencies } from "../lib/loadCurrencies";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CurrencyData } from "../lib/currencies";
 export function useCurrencies() {
@@ -12,13 +13,7 @@ export function useCurrencies() {
     request.current = controller;
     setLoading(true);
     try {
-      const response = await fetch("/api/currencies", {
-        signal: controller.signal,
-        cache: "no-store",
-      });
-      const body = await response.json();
-      if (!response.ok)
-        throw new Error(body.error ?? "Falha ao consultar câmbio.");
+      const body = await loadCurrencies(controller.signal);
       if (!controller.signal.aborted) {
         setData(body);
         setError("");
