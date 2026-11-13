@@ -1724,11 +1724,15 @@ footer > span {
     flex-wrap: wrap;
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .sidebar {
     transform: translateX(-100%);
     width: 244px;
+    max-height: 100dvh;
+    overflow-y: auto;
     transition: transform 0.2s;
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
   }
   .sidebar.open {
     transform: translateX(0);
@@ -1753,8 +1757,30 @@ footer > span {
     display: grid !important;
   }
   .topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
     height: 58px;
     padding: 0 14px;
+    transition: transform 0.22s ease;
+  }
+  .topbar-hidden {
+    transform: translateY(-100%);
+    pointer-events: none;
+  }
+  .main-shell {
+    padding-top: 58px;
+  }
+  .mobile-menu {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 8px;
+    color: var(--text-214436);
+  }
+  .mobile-menu:hover,
+  .mobile-menu:focus-visible {
+    background: var(--background-edf3e9);
   }
   .breadcrumb {
     font-size: 9px;

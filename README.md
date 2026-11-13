@@ -78,4 +78,3 @@ Documentação oficial: https://developers.cloudflare.com/pages/functions/ e htt
 ## Atualização: alternativas de renda fixa
 LCI e LCA agora têm percentuais do CDI editáveis. Poupança usa o rendimento oficial por aniversário mensal do BCB (incluindo TR). Tesouro Selic aparece como estimativa pelo indexador Selic, sem preços de um título específico. Os valores são brutos: não descontam impostos, custódia nem simulam carência/vencimento.
 A renda fixa aceita histórico de até dez anos; na sua aba usa todo o intervalo, independentemente da bolsa. A renda variável continua sujeita ao plano da brapi e ao limite de dois anos da integração.
-O tema claro/escuro e o CapitalContext dos PRs #1 e #2 foram preservados.
