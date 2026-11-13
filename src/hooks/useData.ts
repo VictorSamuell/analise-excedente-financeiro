@@ -44,6 +44,7 @@ export function useData(
   end: string,
   refresh: number,
   scope: "all" | "fixed" = "all",
+  enabled = true,
 ) {
   const lastRefresh = useRef(refresh);
   const [state, setState] = useState<{
@@ -52,6 +53,7 @@ export function useData(
     error?: string;
   }>({ loading: true });
   useEffect(() => {
+    if (!enabled) return;
     let active = true;
     const force = lastRefresh.current !== refresh;
     lastRefresh.current = refresh;
@@ -101,6 +103,6 @@ export function useData(
     return () => {
       active = false;
     };
-  }, [start, end, refresh, scope]);
+  }, [start, end, refresh, scope, enabled]);
   return state;
 }

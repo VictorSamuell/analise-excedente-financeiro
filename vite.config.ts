@@ -1,3 +1,4 @@
+import { handleCurrencies } from "./server/currencies";
 import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
 import { handleApi } from "./server/api";
@@ -9,6 +10,12 @@ export default defineConfig(({ mode }) => {
       {
         name: "local-finance-api",
         configureServer(server) {
+          server.middlewares.use("/api/currencies", async (_req, res) => {
+            const response = await handleCurrencies();
+            res.statusCode = response.status;
+            response.headers.forEach((v, k) => res.setHeader(k, v));
+            res.end(await response.text());
+          });
           server.middlewares.use("/api/data", async (req, res) => {
             try {
               const response = await handleApi(
